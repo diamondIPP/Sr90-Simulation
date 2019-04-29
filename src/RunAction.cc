@@ -6,6 +6,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+
 RunAction::RunAction() :
     G4UserRunAction(), fHistoManager(0)
 {
@@ -17,21 +18,23 @@ RunAction::RunAction() :
 
   //   Creating detector hit ntuple
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  G4cout << "Using " << analysisManager->GetType() << G4endl;
 
   // Create directories
   analysisManager->SetHistoDirectoryName("Histograms");
   analysisManager->SetNtupleDirectoryName("EventData");
 
-  analysisManager->SetFirstNtupleId(1);
+  analysisManager->SetNtupleMerging(true);
+  //analysisManager->SetFirstNtupleId(1);
   // Detector hit tuple (every sensor interaction creates a hit)
   analysisManager->CreateNtuple("DetectorHits", "HitCollection");  // ID 0
-  analysisManager->CreateNtupleIColumn(1, "Event");
-  analysisManager->CreateNtupleDColumn(1, "HitX");
-  analysisManager->CreateNtupleDColumn(1, "HitY");
-  analysisManager->CreateNtupleDColumn(1, "HitZ");
-  analysisManager->CreateNtupleDColumn(1, "TotalEnergyDeposit");
-  analysisManager->CreateNtupleDColumn(1, "TrackLength");
-  analysisManager->FinishNtuple(1);
+  analysisManager->CreateNtupleIColumn("Event");
+  analysisManager->CreateNtupleDColumn("HitX");
+  analysisManager->CreateNtupleDColumn("HitY");
+  analysisManager->CreateNtupleDColumn("HitZ");
+  analysisManager->CreateNtupleDColumn("TotalEnergyDeposit");
+  analysisManager->CreateNtupleDColumn("TrackLength");
+  analysisManager->FinishNtuple();
 
 }
 

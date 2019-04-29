@@ -70,7 +70,7 @@ void EventAction::EndOfEventAction(const G4Event* event){
 
       for(G4int i=0; i<nHits; i++){
         auto hit = static_cast<SensitiveDetectorHit*>(hc->GetHit(i));
-        totalEdep += hit->GetEdep();
+        totalEdep += hit->GetEdep()*1000; //go to keV
         trackLength += hit->GetStepLength();
 
         if (i==0){
@@ -79,7 +79,7 @@ void EventAction::EndOfEventAction(const G4Event* event){
       }
       
       if(totalEdep>0){
-        analysisManager->FillH1(4, totalEdep*1000); 
+        analysisManager->FillH1(4, totalEdep); 
         analysisManager->FillH1(5, pos[0]);
         analysisManager->FillH1(6, pos[1]);
         analysisManager->FillH1(7, pos[2]);
@@ -91,8 +91,9 @@ void EventAction::EndOfEventAction(const G4Event* event){
         analysisManager->FillNtupleDColumn(3, pos[2]);
         analysisManager->FillNtupleDColumn(4, totalEdep);
         analysisManager->FillNtupleDColumn(5, trackLength); 
+        analysisManager->AddNtupleRow();
 
-        G4cout << "total deposited energy: " << totalEdep*1000 << " keV" << G4endl;
+        //G4cout << "total deposited energy: " << totalEdep*1000 << " keV" << G4endl;
       }
     }
 
