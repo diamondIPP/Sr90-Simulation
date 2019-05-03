@@ -45,7 +45,11 @@ SensitiveDetectorHit::SensitiveDetectorHit()
    fTrackID(-1),
    fEdep(0.),
    fPos(G4ThreeVector()),
-   fTrackLength(0.)
+   fTrackLength(0.),
+   fEdepNI(0.),
+   fkinEnergy(0.)
+
+
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

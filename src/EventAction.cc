@@ -65,32 +65,56 @@ void EventAction::EndOfEventAction(const G4Event* event){
       G4int eventID = event->GetEventID();
       G4int nHits = hc->GetSize(); //number of hits stored in event
       G4double totalEdep = 0;
+      G4double EdepNI = 0;
       G4double trackLength = 0;
       G4ThreeVector pos;
+      G4ThreeVector pos_start;
+      G4ThreeVector pos_last;
+      G4double kinE;
+      G4double deltaE;
 
       for(G4int i=0; i<nHits; i++){
         auto hit = static_cast<SensitiveDetectorHit*>(hc->GetHit(i));
-        totalEdep += hit->GetEdep()*1000; //go to keV
+        deltaE = hit->GetEdep()*1000; //go to keV
+        totalEdep += deltaE; 
+        EdepNI += hit->GetEdepNI()*1000;
         trackLength += hit->GetStepLength();
+        pos = hit->GetPos();
+
+        analysisManager->FillNtupleDColumn(1, 0, pos[0]);
+        analysisManager->FillNtupleDColumn(1, 1, pos[1]);
+        analysisManager->FillNtupleDColumn(1, 2, pos[2]);
+        analysisManager->FillNtupleDColumn(1, 3, deltaE);
+        analysisManager->AddNtupleRow(1);
 
         if (i==0){
-          pos = hit->GetPos(); 
+          pos_start = hit->GetPos();
+          kinE = hit->GetKinE()*1000; 
         }
+        if (i==(nHits-1)){
+          pos_last = hit->GetPos();
+        }
+
       }
       
       if(totalEdep>0){
         analysisManager->FillH1(4, totalEdep); 
-        analysisManager->FillH1(5, pos[0]);
-        analysisManager->FillH1(6, pos[1]);
-        analysisManager->FillH1(7, pos[2]);
+        analysisManager->FillH1(5, pos_start[0]);
+        analysisManager->FillH1(6, pos_start[1]);
+        analysisManager->FillH1(7, pos_start[2]);
         analysisManager->FillH1(8, trackLength);
 
         analysisManager->FillNtupleIColumn(0, eventID);
-        analysisManager->FillNtupleDColumn(1, pos[0]);
-        analysisManager->FillNtupleDColumn(2, pos[1]);
-        analysisManager->FillNtupleDColumn(3, pos[2]);
+        analysisManager->FillNtupleDColumn(1, pos_start[0]);
+        analysisManager->FillNtupleDColumn(2, pos_start[1]);
+        analysisManager->FillNtupleDColumn(3, pos_start[2]);
         analysisManager->FillNtupleDColumn(4, totalEdep);
         analysisManager->FillNtupleDColumn(5, trackLength); 
+        analysisManager->FillNtupleDColumn(6, EdepNI);
+        analysisManager->FillNtupleDColumn(7, kinE); 
+        analysisManager->FillNtupleDColumn(8, pos_last[0]);
+        analysisManager->FillNtupleDColumn(9, pos_last[1]);
+        analysisManager->FillNtupleDColumn(10, pos_last[2]);
         analysisManager->AddNtupleRow();
 
         //G4cout << "total deposited energy: " << totalEdep*1000 << " keV" << G4endl;

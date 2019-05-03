@@ -72,7 +72,7 @@ G4bool SensitiveDetector::ProcessHits(G4Step* aStep,
                                      G4TouchableHistory*)
 {  
   // energy deposit
-  G4double edep = aStep->GetTotalEnergyDeposit(); //-GetNonIonizingEnergyDeposit
+  G4double edep = aStep->GetTotalEnergyDeposit(); 
   if (edep==0.) return false;
 
 
@@ -85,10 +85,18 @@ G4bool SensitiveDetector::ProcessHits(G4Step* aStep,
   newHit->SetEdep(edep);
   newHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
 
+  //get non-ionizing energy deposit
+  G4double edepNI = aStep->GetNonIonizingEnergyDeposit();
+  newHit->SetEdepNI(edepNI);
+
+  //get kinetic energy of particle
+  G4StepPoint* prePoint = aStep->GetPreStepPoint();
+  G4double kinEnergyPreStep = prePoint->GetKineticEnergy();
+  newHit->SetKinE(kinEnergyPreStep);
+
   fHitsCollection->insert( newHit );
 
-  //newHit->Print();
-
+  
   return true;
 }
 

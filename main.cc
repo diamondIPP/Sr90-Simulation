@@ -26,11 +26,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//we fuck with B2b here
 //todo: add gold electrodes
-//make ttree with variables for analysis
-//exclude non-ionizing energy deposit
-//replace root with hdf5
+//what is the distribution of deposited energy over the detector thickness
+
 
 
 

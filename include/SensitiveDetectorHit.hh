@@ -66,12 +66,16 @@ class SensitiveDetectorHit : public G4VHit
     void SetEdep     (G4double de)      { fEdep = de; };
     void SetPos      (G4ThreeVector xyz){ fPos = xyz; };
     void SetStepLength (G4double l) {fTrackLength = l;};
+    void SetEdepNI  (G4double deNI) {fEdepNI = deNI;};
+    void SetKinE    (G4double kinE) {fkinEnergy = kinE;};    
 
     // Get methods
     G4int GetTrackID() const     { return fTrackID; };
     G4double GetEdep() const     { return fEdep; };
     G4ThreeVector GetPos() const { return fPos; };
     G4double GetStepLength() const {return fTrackLength;};
+    G4double GetEdepNI() const {return fEdepNI;};
+    G4double GetKinE() const {return fkinEnergy;};
 
   private:
 
@@ -79,7 +83,8 @@ class SensitiveDetectorHit : public G4VHit
       G4double      fEdep;
       G4ThreeVector fPos;
       G4double fTrackLength; ///< Track length in the  sensitive volume
-      G4DynamicParticle fdynParticle;
+      G4double fEdepNI; //non-ionizing energy deposit
+      G4double fkinEnergy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

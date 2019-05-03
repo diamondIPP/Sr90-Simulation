@@ -273,6 +273,41 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
                       0, //this is the copy number (unique per detector)
                       checkOverlaps);
 
+
+    //define electrode pad
+    G4double Aau = 196.97 * g/mole;
+    G4int Zau = 79;
+    G4Material* gold = new G4Material("gold", Zau, Aau, 19.32*g/cm3);
+
+    G4double diael_x = 4.0;
+    G4double diael_y = 4.0;
+    G4double diael_z = 0.0001; //100nm
+
+    G4VSolid* diamond_electrode = new G4Box("diamond_electrode", diael_x/2., diael_y/2., diael_z/2.);
+    G4LogicalVolume* diamond_electrode_volume = new G4LogicalVolume(diamond_electrode,gold,"diamond_electrode_volume");
+    diamond_electrode_volume->SetVisAttributes(G4VisAttributes(G4Colour(1.0,0.0,0.0)));
+
+    G4double diamond_electrode_offset_top = -n_collimators*20. - dia_z - distance + dia_z/2.0 + diael_z/2.0;
+    new G4PVPlacement(rotationMatrix,
+                      G4ThreeVector(0, diamond_electrode_offset_top, 0),
+                      diamond_electrode_volume,
+                      "diamond_electrode_top",
+                      logicWorld,
+                      false,
+                      0, //this is the copy number (unique per detector)
+                      checkOverlaps);
+
+    G4double diamond_electrode_offset_bottom = -n_collimators*20. - dia_z - distance - dia_z/2.0 - diael_z/2.0;
+    new G4PVPlacement(rotationMatrix,
+                      G4ThreeVector(0, diamond_electrode_offset_bottom, 0),
+                      diamond_electrode_volume,
+                      "diamond_electrode_bottom",
+                      logicWorld,
+                      false,
+                      0, //this is the copy number (unique per detector)
+                      checkOverlaps);
+
+
     return physiWorld;
 }
 
